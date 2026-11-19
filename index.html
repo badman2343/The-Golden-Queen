@@ -1,1 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Golden Queen</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
 
+    body {
+      background-color: #fafafa;
+      color: #222;
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header & Navigation */
+    header {
+      background-color: #e6dede;
+      box-shadow: 1px 3px 5px #e6ded1;
+      padding: 15px 30px;
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .business-name {
+      font-size: 1.6rem;
+      font-weight: bold;
+      color: #3b2314;
+    }
+
+    .logo {
+      width: 55px;
+      height: 55px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 2px solid #8c4a27;
+    }
+
+    nav {
+      margin-top: 12px;
+      display: flex;
+      gap: 20px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #3b2314;
+      font-weight: bold;
+      padding: 6px 14px;
+      border-radius: 6px;
+      transition: background-color 0.25s ease, color 0.25s ease, transform 0.2s ease;
+    }
+
+    nav a:hover,
+    nav a.active {
+      background-color: #3b2314;
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    /* Main Content */
+    main {
+      flex: 1;
+      width: 100%;
+      max-width: 1100px;
+      margin: 30px auto;
+      padding: 0 20px 60px;
+    }
+
+    .page-section {
+      display: none;
+    }
+
+    .page-section.active {
+      display: block;
+    }
+
+    .page-heading {
+      margin-bottom: 24px;
+      font-size: 2rem;
+      color: #3b2314;
+    }
+
+    /* Menu Cards */
+    .menu-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    .food-card {
+      width: 260px;
+      height: 300px;
+      padding: 18px;
+      border-radius: 16px;
+      background: linear-gradient(to right, #fff5eb, #f3dfd0);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .food-card img {
+      width: 170px;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 14px;
+    }
+
+    .meal-name {
+      font-size: 1.15rem;
+      font-weight: bold;
+      color: #2b1a10;
+    }
+
+    /* Order Form */
+    .order-form {
+      max-width: 550px;
+      background-color: #ffffff;
+      padding: 28px;
+      border-radius: 12px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 6px;
+      color: #3b2314;
+    }
+
+    .inline-label {
+      display: inline-block;
+      font-weight: normal;
+      margin-right: 14px;
+      margin-bottom: 0;
+      cursor: pointer;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #c9b9b0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    select:focus {
+      outline: none;
+      border-color: #8c4a27;
+      box-shadow: 0 0 0 3px rgba(140, 74, 39, 0.15);
+    }
+
+    input[type="radio"],
+    input[type="checkbox"] {
+      margin-right: 5px;
+      accent-color: #8c4a27;
+      cursor: pointer;
+    }
+
+    button[type="submit"] {
+      background-color: #8c4a27;
+      color: #ffffff;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.25s ease;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #6b3519;
+    }
+
+    .confirmation-msg {
+      display: none;
+      margin-top: 16px;
+      padding: 12px 16px;
+      background-color: #e8f5e9;
+      color: #1b5e20;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    /* Footer */
+    footer {
+      width: 100%;
+      background-color: #e6dede;
+      color: #3b2314;
+      text-align: center;
+      padding: 18px 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="header-top">
+      <div class="business-name">The Golden Queen</div>
+      <img
+        class="logo"
+        alt="The Golden Queen Logo"
+        src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%238c4a27'/><path d='M25 65 L32 35 L50 50 L68 35 L75 65 Z' fill='%23ffd700'/><rect x='25' y='68' width='50' height='7' rx='3' fill='%23ffd700'/></svg>"
+      />
+    </div>
+    <nav>
+      <a href="#menu" id="nav-menu" class="active" onclick="showSection('menu', event)">menu</a>
+      <a href="#form" id="nav-form" onclick="showSection('form', event)">form</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Menu Section -->
+    <section id="menu-section" class="page-section active">
+      <h1 class="page-heading">Our Menu</h1>
+
+      <div class="menu-grid">
+        <div class="food-card">
+          <img
+            alt="Grilled Chicken"
+            src="https://images.unsplash.com/photo-1598103442097-8b74394b95c6?auto=format&fit=crop&w=400&q=80"
+          />
+          <p class="meal-name">Grilled Chicken</p>
+        </div>
+
+        <div class="food-card">
+          <img
+            alt="Beef Pilau"
+            src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=400&q=80"
+          />
+          <p class="meal-name">Beef Pilau</p>
+        </div>
+
+        <div class="food-card">
+          <img
+            alt="Classic Burger"
+            src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=400&q=80"
+          />
+          <p class="meal-name">Classic Burger</p>
+        </div>
+
+        <div class="food-card">
+          <img
+            alt="Creamy Pasta"
+            src="https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?auto=format&fit=crop&w=400&q=80"
+          />
+          <p class="meal-name">Creamy Pasta</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Order Form Section -->
+    <section id="form-section" class="page-section">
+      <h1 class="page-heading">Place Your Order</h1>
+
+      <form class="order-form" id="orderForm" onsubmit="handleOrderSubmit(event)">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            maxlength="50"
+            required
+            placeholder="Enter your name"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Gender</label>
+          <label class="inline-label">
+            <input type="radio" name="gender" value="Male" required /> Male
+          </label>
+          <label class="inline-label">
+            <input type="radio" name="gender" value="Female" /> Female
+          </label>
+          <label class="inline-label">
+            <input type="radio" name="gender" value="Other" /> Other
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label for="chosen-meal">Chosen meal</label>
+          <select id="chosen-meal" name="chosen_meal" required>
+            <option value="">-- Select a meal --</option>
+            <option value="Grilled Chicken">Grilled Chicken</option>
+            <option value="Beef Pilau">Beef Pilau</option>
+            <option value="Classic Burger">Classic Burger</option>
+            <option value="Creamy Pasta">Creamy Pasta</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="table">Table (1 - 12)</label>
+          <input
+            type="number"
+            id="table"
+            name="table"
+            min="1"
+            max="12"
+            required
+            placeholder="1 to 12"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Drinks</label>
+          <label class="inline-label">
+            <input type="checkbox" name="drinks" value="wine" /> wine
+          </label>
+          <label class="inline-label">
+            <input type="checkbox" name="drinks" value="beer" /> beer
+          </label>
+          <label class="inline-label">
+            <input type="checkbox" name="drinks" value="soda" /> soda
+          </label>
+          <label class="inline-label">
+            <input type="checkbox" name="drinks" value="water" /> water
+          </label>
+        </div>
+
+        <button type="submit">Submit Order</button>
+
+        <div id="confirmation" class="confirmation-msg"></div>
+      </form>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    Developer: Your Name
+  </footer>
+
+  <script>
+    function showSection(section, event) {
+      if (event) event.preventDefault();
+
+      document.getElementById('menu-section').classList.remove('active');
+      document.getElementById('form-section').classList.remove('active');
+      document.getElementById('nav-menu').classList.remove('active');
+      document.getElementById('nav-form').classList.remove('active');
+
+      document.getElementById(section + '-section').classList.add('active');
+      document.getElementById('nav-' + section).classList.add('active');
+    }
+
+    function handleOrderSubmit(event) {
+      event.preventDefault();
+      const name = document.getElementById('name').value;
+      const meal = document.getElementById('chosen-meal').value;
+      const table = document.getElementById('table').value;
+      const confirmation = document.getElementById('confirmation');
+
+      confirmation.textContent = `Thank you, ${name}! Your order for ${meal} at Table ${table} has been received.`;
+      confirmation.style.display = 'block';
+    }
+  </script>
+</body>
+  </html>
+            
